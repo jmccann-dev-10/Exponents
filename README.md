@@ -12,7 +12,8 @@ For comparison, I also included the BigInteger.power for comparison.  Binary doe
 with larger exponents.  Initially when I was doing this with integers and longs, a standard for loop ran faster than
 the binary exponent by a negligible amount (roughly 10ish or less nanoseconds).  When I changed this to BigInteger
 to account for the larger numbers, I started seeing better performance from the binary exponents, but never more than
-500 nanoseconds or so.  In most cases, though, using BigInteger.power nearly always beat out both methods hands down.
+500 nanoseconds or so.  In most cases, though, using BigInteger.power nearly always beat out both methods hands down
+by nearly half the time either of the two methods could finish in, almost every time.
 
 ### Conclusion
 Don't be clever, the tools written for Java will likely outperform any kinds of optimizations you may attempt to write
