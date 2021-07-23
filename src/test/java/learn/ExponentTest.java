@@ -18,11 +18,11 @@ class ExponentTest {
 
     @RepeatedTest(1000)
     public void methodsShouldProduceSameResults() {
-        int number = random.nextInt(100);
+        int base = random.nextInt(100);
         int power = random.nextInt(100);
 
         System.out.println("=".repeat(60));
-        assertEquals(Exponent.exponent(number, power), Exponent.binaryExponent(number, power));
+        assertEquals(Exponent.exponent(base, power), Exponent.binaryExponent(base, power));
     }
 
     @RepeatedTest(1000)

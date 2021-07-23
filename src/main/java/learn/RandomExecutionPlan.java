@@ -9,14 +9,14 @@ import java.util.Random;
 @State(Scope.Benchmark)
 public class RandomExecutionPlan {
 
-    public int num;
+    public int base;
     public int power;
 
     private static Random random = new Random();
 
     @Setup
     public void setup() {
-        num = random.nextInt(100);
+        base = random.nextInt(100);
         power = random.nextInt(100);
     }
 
