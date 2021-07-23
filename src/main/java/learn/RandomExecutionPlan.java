@@ -16,8 +16,8 @@ public class RandomExecutionPlan {
 
     @Setup
     public void setup() {
-        num = random.nextInt(15);
-        power = random.nextInt(15);
+        num = random.nextInt(100);
+        power = random.nextInt(100);
     }
 
 }

@@ -3,10 +3,17 @@ package learn;
 import org.openjdk.jmh.annotations.*;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 public class Exponent {
+
+    private static final NumberFormat formatter = new DecimalFormat("0.######E0", DecimalFormatSymbols.getInstance(Locale.ROOT));
 
     public static void main(String[] args) throws IOException {
         org.openjdk.jmh.Main.main(args);
@@ -48,43 +55,46 @@ public class Exponent {
             number = random.nextInt(15);
             power = random.nextInt(15);
             long start = System.nanoTime();
-            Math.pow(number, power);
+            BigInteger.valueOf(number).pow(power);
             expTime += System.nanoTime() - start;
         }
         return (expTime + 0.0) / count;
     }
 
-    public static long exponent(int num, int power) {
-        long value = 1L;
+    public static BigInteger exponent(int num, int power) {
+        BigInteger value = BigInteger.ONE;
 //        int totalCalculation = 0;
 //        int loops = 0;
         for (int i = 0; i < power; i++) {
-            value *= num;
+            value = value.multiply(BigInteger.valueOf(num));
 //            totalCalculation++;
 //            loops++;
         }
-//        System.out.printf("num: %2d, power: %2d, value: %21d, calcs: %2d, loops: %2d%n", num, power, value, totalCalculation, loops);
+//        System.out.printf("exp ~ num: %2d, power: %2d, value: %-12s, calcs: %2d, loops: %2d%n", num, power, formatter.format(value), totalCalculation, loops);
         return value;
     }
 
-    public static long binaryExponent(int num, int power) {
-        long value = 1L;
-        int exp = num;
+    public static BigInteger binaryExponent(int num, int power) {
+        BigInteger value = BigInteger.ONE;
+        BigInteger exp = BigInteger.valueOf(num);
 //        int totalCalculations = 0;
 //        int loops = 0;
         for (int i = power; i > 0; i >>= 1) {
-//            String iteration = Integer.toBinaryString(i);
-//            String left = iteration.length() > 1 ? iteration.substring(0, iteration.length() - 1) : "";
-//            char right = iteration.charAt(iteration.length() - 1);
-//            System.out.printf("Iteration: %2d, %4s -> %s ~ %s%n", i, left, right, right == '1');
+            /* This will demonstrate how the for loop works
+            String iteration = Integer.toBinaryString(i);
+            String left = iteration.length() > 1 ? iteration.substring(0, iteration.length() - 1) : "";
+            char right = iteration.charAt(iteration.length() - 1);
+            System.out.printf("Iteration: %2d, %7s -> %s ~ %s%n", i, left, right, right == '1');
+            */
             if ((i & 1) == 1) {
-                value *= exp;
+//                totalCalculations++;
+                value = value.multiply(exp);
             }
-            exp *= exp;
-//            totalCalculations += 3;
+            exp = exp.multiply(exp);
+//            totalCalculations += 2;
 //            loops++;
         }
-//        System.out.printf("num: %2d, power: %2d, value: %21d, calcs: %2d, loops: %2d%n", num, power, value, totalCalculations, loops);
+//        System.out.printf("bin ~ num: %2d, power: %2d, value: %-12s, calcs: %2d, loops: %2d%n", num, power, formatter.format(value), totalCalculations, loops);
         return value;
     }
 
@@ -93,7 +103,7 @@ public class Exponent {
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
     @Measurement(iterations = 5, time = 1)
     @Warmup(iterations = 5, time = 1)
-    public static long binaryExponent(StaticExecutionPlan plan) {
+    public static BigInteger binaryExponent(StaticExecutionPlan plan) {
         return binaryExponent(plan.num, plan.power);
     }
 
@@ -102,7 +112,7 @@ public class Exponent {
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
     @Measurement(iterations = 5, time = 1)
     @Warmup(iterations = 5, time = 1)
-    public static long exponent(StaticExecutionPlan plan) {
+    public static BigInteger exponent(StaticExecutionPlan plan) {
         return exponent(plan.num, plan.power);
     }
 
@@ -111,8 +121,8 @@ public class Exponent {
     @OutputTimeUnit(TimeUnit.NANOSECONDS)
     @Measurement(iterations = 5, time = 1)
     @Warmup(iterations = 5, time = 1)
-    public static double mathDotPower(StaticExecutionPlan plan) {
-        return Math.pow(plan.num, plan.power);
+    public static BigInteger bigIntegerPow(StaticExecutionPlan plan) {
+        return BigInteger.valueOf(plan.num).pow(plan.num);
     }
 
 }
